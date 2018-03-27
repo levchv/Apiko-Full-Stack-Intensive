@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Home worrk 2</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+        createElement = function (tag, props, ...content){
+            var element = document.createElement(tag.toUpperCase());
+            if (props) {
+                Object.keys(props).forEach(k => typeof(props[k]) === "object" ? Object.keys(props[k]).forEach(i => element[k][i] = props[k][i]) : element[k] = props[k]);
+            }
+            if (content) {
+                content = content.reduce((acc, val) => acc.concat(val), []);
+                content.forEach(i => element.appendChild(typeof(i) === "string" ? document.createTextNode(i) : i));
+            }
+            return element;
+        }
+        render = function (element, root){
+            root.appendChild(element);
+        }
+
+        const React = {
+            createElement,
+            render,
+        }
+
+        const app = 
+        React.createElement('div', { style: { backgroundColor: 'red' } }, [
+            React.createElement('span', undefined, 'Hello world'),
+            React.createElement('br'),
+            'This is just a text node',
+            React.createElement('div', { textContent: 'Text content' }),
+        ]);
+
+        React.render(
+            app,
+            document.getElementById('root'),
+        );
+    </script>
+  </body>
+</html>
