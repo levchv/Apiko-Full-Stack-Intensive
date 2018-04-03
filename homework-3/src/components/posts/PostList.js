@@ -3,6 +3,7 @@ import PostListItem from './PostListItem';
 import AddMoreButton from '../buttons/AddMoreButton';
 import SearchInput from '../plugins/search';
 import Warning from '../plugins/warning';
+import Loader from '../plugins/loader';
 
 class PostList extends Component {
 
@@ -11,24 +12,27 @@ class PostList extends Component {
         this.state = {
             posts: [],
             search: '',
-            totalPostsCount: 0
+            totalPostsCount: undefined,
+            isLoading: true,
+            fetchInterval: null
         };
 
         this.searchInputOnChange = this.searchInputOnChange.bind(this);
         this.addMoreButtonOnClick = this.addMoreButtonOnClick.bind(this);
+        this.loadInitialPosts = this.loadInitialPosts.bind(this);
     }
 
     getPosts(index, action) {
-        fetch('/posts.json')
+        fetch('https://jsonplaceholder.typicode.com/posts')
             .then(result => result.json())
             .then(result => this.state.search ? result.filter(i => i.title.includes(this.state.search)): result)
-            .then(result => { this.setState({ totalPostsCount: result.length }); return result; })
+            .then(result => { this.setState({ totalPostsCount: result.length, isLoading: false }); return result; })
             .then(result => result.slice(index*10, (index+1)*10))
             .then(result => action(result));
     }
     
     loadInitialPosts() {
-        this.getPosts(0, (posts) => this.setState({ posts: posts}));
+        this.getPosts(0, (posts) => this.setState({ posts: posts }));
     }
 
     searchInputOnChange(event) {
@@ -40,7 +44,14 @@ class PostList extends Component {
     }
 
     componentDidMount() {
-        this.loadInitialPosts();
+        var interval = setInterval(this.loadInitialPosts, 5000);
+        this.setState({ fetchInterval: interval });
+    }
+
+    componentWillUnmount() {
+        if (this.state.fetchInterval) {
+            clearInterval(this.state.fetchInterval);
+        }
     }
 
     render() {
@@ -51,9 +62,10 @@ class PostList extends Component {
                     value={this.state.search} 
                     onChange={this.searchInputOnChange}>
                 </SearchInput>
+                {this.state.isLoading ? <Loader></Loader> :
                 <ul>
                     {this.state.posts.map(post => (<PostListItem key={post.id} title={post.title}></PostListItem>))}                    
-                </ul>
+                </ul>}
                 {this.state.totalPostsCount > this.state.posts.length && <AddMoreButton onClick={this.addMoreButtonOnClick}></AddMoreButton>}
                 {this.state.totalPostsCount === 0 && <Warning text="No items found"></Warning>}
             </React.Fragment>
