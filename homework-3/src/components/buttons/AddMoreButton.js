@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SimpleButton from './SimpleButton';
 
 const AddMoreButton = ({onClick}) => (
-    <button onClick={onClick}>Add more </button>
+    <SimpleButton onClick={onClick}>Add more </SimpleButton>
 );
 
 AddMoreButton.propTypes = {
