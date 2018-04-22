@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-/*const PostListItem = ({title}) => (
+const PostListItem = ({title}) => (
     <li>{title}</li>
-);*/
+);
 
-class PostListItem extends Component {
+/*class PostListItem extends Component {
 
     constructor(props) {
         super(props);
@@ -20,7 +20,7 @@ class PostListItem extends Component {
             <li>{this.props.title}</li>
         )
     }
-}
+}*/
 
 
 PostListItem.propTypes = {

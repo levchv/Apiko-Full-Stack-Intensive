@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import PostListItem from './PostListItem';
+import PostListItem from './PostListItemEnhancer';
 import AddMoreButton from '../buttons/AddMoreButton';
 import SearchInput from '../plugins/search';
 import Warning from '../plugins/warning';
